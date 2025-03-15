@@ -10,7 +10,9 @@ expressCustomFunction(express);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb', parameterLimit: 1000000 }));
 
-dotenv.config();
+dotenv.config({
+  path: `./env/${process.env.NODE_ENV}.env`
+});
 const port = process.env.PORT || 3000
 
 app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
