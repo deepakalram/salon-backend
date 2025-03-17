@@ -12,7 +12,7 @@ export const register = async (req, res) => {
             email: Joi.string().email().required(),
             password_hash: Joi.string().min(8).required(),
             phone: Joi.number().required(),
-            business_id: Joi.number().required(),
+            business_id: Joi.number(),
             role_id: Joi.number().required(),
         }
         let validationError = await getValidationError(reqSchema, body)
