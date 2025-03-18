@@ -1,11 +1,13 @@
 import dotenv from 'dotenv';
 import express from 'express';
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger/swagger.js';
 import business_routes from './routes/web_routes/business_routes.js';
 import expressCustomFunction from './common/custom_functions.js';
 
 const app = express();
+app.use(cors());
 expressCustomFunction(express);
 
 app.use(express.json({ limit: '50mb' }));
