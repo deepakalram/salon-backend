@@ -70,4 +70,42 @@ export const login = async (req, res) => {
     }
 }
 
+export const adminCreateUser = async (req, res) => {
+    try {
+        let body = req.body;
+        let reqSchema = {
+            name: Joi.string().required(),
+            email: Joi.string().email().required(),
+            password: Joi.string().min(8).required(),
+            phone: Joi.number().required(),
+            role_id: Joi.number().required(),
+            business_id: Joi.number().required()
+        }
+        let validationError = await getValidationError(reqSchema, body)
+        if (validationError.error) {
+            res.sendInvalidRequest(validationError.message);
+            return false;
+        }
+        let hashedPassword = HmacSHA256(body.password, process.env.JWT_SECRET_KEY).toString();
+        let user = await db('users')
+            .insert({
+                name: body.name,
+                email: body.email,
+                password_hash: hashedPassword,
+                phone: body.phone,
+                role_id: body.role_id,
+                business_id: body.business_id,
+                created_by: req.user.id
+            })
+        if (!user) {
+            res.sendError("User not created");
+            return false;
+        } else {
+            res.sendCreated("User created successfully by admin", user);
+        }
+    } catch (error) {
+        res.sendError(error.message);
+    }
+}
+
 export default register;
