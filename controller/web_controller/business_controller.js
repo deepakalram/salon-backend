@@ -95,10 +95,15 @@ export const addBusiness = async (req, res) => {
 
 export const getAllBusinesses = async (req, res) => {
     try {
+        let page_number = parseInt(req.query.page) || 1;
+        let limit = parseInt(req.query.limit) || 10;
+        let offset = (page_number - 1) * limit;
         let business = await db('businesses')
             .join('business_types', 'business_types.id', 'businesses.business_type_id',)
             .join('business_details', 'business_details.id', 'businesses.business_details_id')
-            .where({ is_deleted: false });
+            .where({ is_deleted: false })
+            .limit(limit)
+            .offset(offset)
         if (business.length === 0) {
             res.sendError("Business not found");
             return false;
