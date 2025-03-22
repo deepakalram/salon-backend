@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerSpec from './swagger/swagger.js';
+import user_routes from './routes/web_routes/user_routes.js';
 import expressCustomFunction from './common/custom_functions.js';
 
 const app = express();
@@ -16,6 +17,7 @@ dotenv.config({
 const port = process.env.PORT || 3000
 
 app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/users', user_routes);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
